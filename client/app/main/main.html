@@ -1,27 +1,220 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
-
-<header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>CacheMemory</h1>
-    <p class="lead">La memoria cache explicada.</p>
-  </div>
-</header>
-
 <div class="container">
   <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}</a></li>
-      </ul>
+    <div class="col-md-8">
+      <form class="form-vertical" role="form">
+        <div class="form-group">
+          <label class="" for="">Palabra</label>
+          <input type="text" class="form-control" id="" ng-model="word" placeholder="Palabra">
+        </div>
+      </form>
+    </div>
+    <div class="col-md-4">
+      <span ng-model="binary_word"></span>
     </div>
   </div>
 </div>
 
-<footer class="footer">
-  <div class="container">
-      <p>Universidad del Valle |
-        <a href="https://twitter.com/juliancantillo">@juliancantillo</a> |
-         <a href="https://github.com/juliancantillo/cachememory/issues?state=open">Issues</a></p>
+<div class="container">
+  <div class="">
+    <div class="col-md-6">
+      <form action="" class="form-horizontal" role="form">
+        <div class="form-group">
+          <legend>Especificaciones de Memoria</legend>
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-5 control-label">Tamaño de Memoria Principal</label>
+          <div class="input-group col-xs-7">
+            <input type="number" class="form-control" step="2" aria-label="Tamaño de Memoria Principal" ng-model="values.mm.size">
+            <div dropdown class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle">
+                <span ng-bind="values.mm.unit.name"></span> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="unit in data_units"><a ng-click="setMmUnit(unit)" href="#" ng-bind="unit.name"></a></li>
+              </ul>
+            </div>
+          </div><!-- /input-group -->
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-5 control-label">Tamaño de Memoria Cache</label>
+          <div class="input-group col-xs-7">
+            <input type="number" class="form-control" step="2" aria-label="Tamaño de Memoria Cache" ng-model="values.cm.size">
+            <div dropdown class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle">
+                <span ng-bind="values.cm.unit.name"></span> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="unit in data_units"><a ng-click="setCmUnit(unit)" href="#" ng-bind="unit.name"></a></li>
+              </ul>
+            </div>
+          </div><!-- /input-group -->
+        </div>
+
+        <div class="form-group">
+          <label class="col-xs-5 control-label">Tamaño de Bloque</label>
+          <div class="input-group col-xs-7">
+            <input type="number" class="form-control" step="2" aria-label="Tamaño de Bloque" ng-model="values.mb.size">
+            <div dropdown class="input-group-btn">
+              <button type="button" class="btn btn-default dropdown-toggle">
+                <span ng-bind="values.mb.unit.name"></span> <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu">
+                <li ng-repeat="unit in data_units"><a ng-click="setMbUnit(unit)" href="#" ng-bind="unit.name"></a></li>
+              </ul>
+            </div>
+          </div><!-- /input-group -->
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-7 col-sm-offset-5">
+            <button type="button" ng-click="submitForm()" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </form>
+    </div><!-- /col-md-6 -->
+
+    <div class="col-md-6">
+      <div class="panel panel-info">
+        <div class="panel-heading">
+        <h3 class="panel-title">Data</h3>
+        </div>
+        <ul class="list-group">
+          <li class="list-group-item">
+            2<sup ng-bind="results.mm.log"></sup> Bits para direccionar memoria: <span ng-bind="results.mm.log"></span>
+          </li>
+          <li class="list-group-item">
+            2<sup ng-bind="results.word.log"></sup> Bits para direccionar palabra: <span ng-bind="results.word"></span>
+          </li>
+          <li class="list-group-item">
+            2<sup ng-bind="results.cm.log"></sup> Bits para direccionar linea: <span ng-bind="results.line"></span><br>
+            <small>C = 2<sup ng-bind="results.cm.log"></sup> / 2<sup ng-bind="results.word.log"></sup></small>
+          </li>
+          <li class="list-group-item">
+            2<sup ng-bind="results.M.log"></sup>
+            <small>M = 2<sup ng-bind="results.mm.log"></sup> / 2<sup ng-bind="results.word"></sup></small>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+
   </div>
-</footer>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Correspondencia Directa</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Tag <span class="badge badge-success" ng-bind="results.direct.tag"></span></th>
+            <th>Line <span class="badge badge-success" ng-bind="results.line"></span></th>
+            <th>Word <span class="badge badge-success" ng-bind="results.word"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span ng-bind="direct_tag"></span></td>
+            <td><span ng-bind="direct_line"></span></td>
+            <td><span ng-bind="direct_word"></span></td>
+          </tr>
+          <tr>
+            <td><span ng-bind="direct_tag_hex"></span></td>
+            <td><span ng-bind="direct_line_hex"></span></td>
+            <td><span ng-bind="direct_word_hex"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Asociativo</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Tag <span class="badge badge-success" ng-bind="results.direct.tag"></span></th>
+            <th>Word <span class="badge badge-success" ng-bind="results.word"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span ng-bind="associative_tag"></span></td>
+            <td><span ng-bind="associative_word"></span></td>
+          </tr>
+          <tr>
+            <td><span ng-bind="associative_tag_hex"></span></td>
+            <td><span ng-bind="associative_word_hex"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Correspondencia Asociativa 2 Vias</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Tag <span class="badge badge-success" ng-bind="results.direct.tag"></span></th>
+            <th>Set <span class="badge badge-success" ng-bind="results.line"></span></th>
+            <th>Word <span class="badge badge-success" ng-bind="results.word"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span ng-bind="associative2_tag"></span></td>
+            <td><span ng-bind="associative2_line"></span></td>
+            <td><span ng-bind="associative2_word"></span></td>
+          </tr>
+          <tr>
+            <td><span ng-bind="associative2_tag_hex"></span></td>
+            <td><span ng-bind="associative2_line_hex"></span></td>
+            <td><span ng-bind="associative2_word_hex"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <h1>Correspondencia Asociativa 4 Vias</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Tag <span class="badge badge-success" ng-bind="results.direct.tag"></span></th>
+            <th>Set <span class="badge badge-success" ng-bind="results.line"></span></th>
+            <th>Word <span class="badge badge-success" ng-bind="results.word"></span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span ng-bind="associative4_tag"></span></td>
+            <td><span ng-bind="associative4_line"></span></td>
+            <td><span ng-bind="associative4_word"></span></td>
+          </tr>
+          <tr>
+            <td><span ng-bind="associative4_tag_hex"></span></td>
+            <td><span ng-bind="associative4_line_hex"></span></td>
+            <td><span ng-bind="associative4_word_hex"></span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

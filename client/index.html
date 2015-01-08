@@ -27,7 +27,25 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
+    <div ng-include="'components/navbar/navbar.html'"></div>
+
+    <header class="hero-unit" id="banner">
+      <div class="container">
+        <h1>CacheMemory</h1>
+        <p class="lead">La memoria cache explicada.</p>
+      </div>
+    </header>
+
     <div ng-view=""></div>
+
+    <footer class="footer">
+      <div class="container">
+          <p>Universidad del Valle |
+            <a href="https://twitter.com/juliancantillo">@juliancantillo</a> |
+             <a href="https://github.com/juliancantillo/cachememory/issues?state=open" target="_blank">Issues</a></p>
+      </div>
+    </footer>
+
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
