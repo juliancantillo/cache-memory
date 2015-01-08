@@ -3,30 +3,30 @@
 angular.module('cachemApp')
   .controller('MainCtrl', function ($scope, $http) {
 
-    $scope.checkHex = function (n){return/^[0-9A-Fa-f]{1,64}$/.test(n)}
-    $scope.checkBin = function (n){return/^[01]{1,64}$/.test(n)}
-    $scope.Hex2Bin = function (n){if(!$scope.checkHex(n))return 0;return parseInt(n,16).toString(2);}
-    $scope.Bin2Hex = function (n){if(!$scope.checkBin(n))return 0;return parseInt(n,2).toString(16)}
+    $scope.checkHex = function (n){return/^[0-9A-Fa-f]{1,64}$/.test(n)};
+    $scope.checkBin = function (n){return/^[01]{1,64}$/.test(n)};
+    $scope.Hex2Bin = function (n){if(!$scope.checkHex(n)){return 0;} return parseInt(n,16).toString(2)};
+    $scope.Bin2Hex = function (n){if(!$scope.checkBin(n)){return 0;} return parseInt(n,2).toString(16)};
 
     $scope.word = '7EABC495FE';
     $scope.binary_word = $scope.Hex2Bin($scope.word);
 
-    $scope.data_units = [
+    $scope.dataUnits = [
       { name: "b", factor: 0 },
       { name: "Kb", factor: 10 },
       { name: "Mb", factor: 20 },
       { name: "Gb", factor: 30 },
     ];
     $scope.currents = {
-      mm_unit: $scope.data_units[0],
-      cm_unit: $scope.data_units[0],
-      mb_unit: $scope.data_units[0],
+      mm_unit: $scope.dataUnits[0],
+      cm_unit: $scope.dataUnits[0],
+      mb_unit: $scope.dataUnits[0],
     };
 
     $scope.values = {
-      mm: { size: 512, unit: $scope.data_units[3] },
-      cm: { size: 64, unit: $scope.data_units[2] },
-      mb: { size: 32, unit: $scope.data_units[0] },
+      mm: { size: 512, unit: $scope.dataUnits[3] },
+      cm: { size: 64, unit: $scope.dataUnits[2] },
+      mb: { size: 32, unit: $scope.dataUnits[0] },
     };
     $scope.results = {
       mm: { log: 13 },
@@ -47,29 +47,29 @@ angular.module('cachemApp')
       $scope.values.mb.unit = unit;
     }
 
-    $scope.$watchCollection('values.mm', function (new_val) {
+    $scope.$watchCollection('values.mm', function (newValue) {
       $scope.results['mm'] = {
-          log: $scope.getLog( new_val.size, new_val.unit.factor )
+          log: $scope.getLog( newValue.size, newValue.unit.factor )
         };
-      $scope.results['M'] = $scope.getLog( new_val.size, new_val.unit.factor ) - $scope.results['word'];
+      $scope.results['M'] = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results['word'];
     });
 
-    $scope.$watchCollection('values.cm', function (new_val) {
+    $scope.$watchCollection('values.cm', function (newValue) {
       $scope.results['cm'] = {
-          log: $scope.getLog( new_val.size, new_val.unit.factor )
+          log: $scope.getLog( newValue.size, newValue.unit.factor )
         };
-      $scope.results['line'] = $scope.getLog( new_val.size, new_val.unit.factor ) - $scope.results['word'];
+      $scope.results['line'] = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results['word'];
 
-      $scope.results.direct['line'] = $scope.getLog( new_val.size, new_val.unit.factor ) - $scope.results['word'];
-      $scope.results.direct['tag'] = $scope.results.mm.log - $scope.getLog( new_val.size, new_val.unit.factor );
+      $scope.results.direct['line'] = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results['word'];
+      $scope.results.direct['tag'] = $scope.results.mm.log - $scope.getLog( newValue.size, newValue.unit.factor );
 
     });
 
-    $scope.$watchCollection('values.mb', function (new_val) {
+    $scope.$watchCollection('values.mb', function (newValue) {
       $scope.results['mb'] = {
-          log: $scope.getLog( new_val.size, new_val.unit.factor )
+          log: $scope.getLog( newValue.size, newValue.unit.factor )
         };
-      $scope.results['word'] = $scope.getLog( new_val.size, new_val.unit.factor );
+      $scope.results['word'] = $scope.getLog( newValue.size, newValue.unit.factor );
     });
 
     $scope.submitForm = function (){
