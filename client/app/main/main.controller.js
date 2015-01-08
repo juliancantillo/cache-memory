@@ -1,21 +1,21 @@
 'use strict';
 
 angular.module('cachemApp')
-  .controller('MainCtrl', function ($scope, $http) {
+  .controller('MainCtrl', function ($scope) {
 
-    $scope.checkHex = function (n){return/^[0-9A-Fa-f]{1,64}$/.test(n)};
-    $scope.checkBin = function (n){return/^[01]{1,64}$/.test(n)};
-    $scope.Hex2Bin = function (n){if(!$scope.checkHex(n)){return 0;} return parseInt(n,16).toString(2)};
-    $scope.Bin2Hex = function (n){if(!$scope.checkBin(n)){return 0;} return parseInt(n,2).toString(16)};
+    $scope.checkHex = function (n){return/^[0-9A-Fa-f]{1,64}$/.test(n); };
+    $scope.checkBin = function (n){return/^[01]{1,64}$/.test(n); };
+    $scope.Hex2Bin = function (n){if(!$scope.checkHex(n)){return 0;} return parseInt(n,16).toString(2); };
+    $scope.Bin2Hex = function (n){if(!$scope.checkBin(n)){return 0;} return parseInt(n,2).toString(16); };
 
     $scope.word = '7EABC495FE';
     $scope.binary_word = $scope.Hex2Bin($scope.word);
 
     $scope.dataUnits = [
-      { name: "b", factor: 0 },
-      { name: "Kb", factor: 10 },
-      { name: "Mb", factor: 20 },
-      { name: "Gb", factor: 30 },
+      { name: 'b', factor: 0 },
+      { name: 'Kb', factor: 10 },
+      { name: 'Mb', factor: 20 },
+      { name: 'Gb', factor: 30 },
     ];
     $scope.currents = {
       mm_unit: $scope.dataUnits[0],
@@ -39,37 +39,37 @@ angular.module('cachemApp')
 
     $scope.setMmUnit = function (unit) {
       $scope.values.mm.unit = unit;
-    }
+    };
     $scope.setCmUnit = function (unit) {
       $scope.values.cm.unit = unit;
-    }
+    };
     $scope.setMbUnit = function (unit) {
       $scope.values.mb.unit = unit;
-    }
+    };
 
     $scope.$watchCollection('values.mm', function (newValue) {
-      $scope.results['mm'] = {
+      $scope.results.mm = {
           log: $scope.getLog( newValue.size, newValue.unit.factor )
         };
-      $scope.results['M'] = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results['word'];
+      $scope.results.M = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results.word;
     });
 
     $scope.$watchCollection('values.cm', function (newValue) {
-      $scope.results['cm'] = {
+      $scope.results.cm = {
           log: $scope.getLog( newValue.size, newValue.unit.factor )
         };
-      $scope.results['line'] = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results['word'];
+      $scope.results.line = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results.word;
 
-      $scope.results.direct['line'] = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results['word'];
-      $scope.results.direct['tag'] = $scope.results.mm.log - $scope.getLog( newValue.size, newValue.unit.factor );
+      $scope.results.direct.line = $scope.getLog( newValue.size, newValue.unit.factor ) - $scope.results.word;
+      $scope.results.direct.tag = $scope.results.mm.log - $scope.getLog( newValue.size, newValue.unit.factor );
 
     });
 
     $scope.$watchCollection('values.mb', function (newValue) {
-      $scope.results['mb'] = {
+      $scope.results.mb = {
           log: $scope.getLog( newValue.size, newValue.unit.factor )
         };
-      $scope.results['word'] = $scope.getLog( newValue.size, newValue.unit.factor );
+      $scope.results.word = $scope.getLog( newValue.size, newValue.unit.factor );
     });
 
     $scope.submitForm = function (){
@@ -102,10 +102,10 @@ angular.module('cachemApp')
       $scope.associative_word = bnw.substring( $scope.results.M, $scope.results.M + $scope.results.word );
       $scope.associative_tag_hex = $scope.Bin2Hex( $scope.associative_tag );
       $scope.associative_word_hex = $scope.Bin2Hex( $scope.associative_word );
-    }
+    };
 
     $scope.getLog = function (value, factor) {
       return ( Math.log( value ) / Math.log(2) ) + factor;
-    }
+    };
 
   });
